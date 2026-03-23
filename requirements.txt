@@ -1,10 +1,10 @@
 # Runtime dependencies for chrome-ocr
 # Install with: pip install -r requirements.txt
 
-# Core — required for image_to_text()
+# Core — required for ocr_img()
 numpy>=1.23
 pillow>=9.0
 protobuf>=4.0
 
-# Optional — required only for pdf_to_markdown()
+# Optional — required only for ocr_pdf()
 # pymupdf>=1.22

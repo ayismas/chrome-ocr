@@ -2,9 +2,9 @@ name: Tests
 
 on:
   push:
-    branches: [main]
+    branches: [main, master]
   pull_request:
-    branches: [main]
+    branches: [main, master]
 
 jobs:
   unit-tests:
@@ -47,5 +47,5 @@ jobs:
       - name: Install ruff
         run: pip install ruff
       - name: Lint
-        run: ruff check chrome_ocr.py
+        run: ruff check chrome_ocr tests
         continue-on-error: true   # advisory only — does not fail the build

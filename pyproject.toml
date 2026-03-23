@@ -1,13 +1,13 @@
 [build-system]
 requires = ["setuptools>=68", "wheel"]
-build-backend = "setuptools.backends.legacy:build"
+build-backend = "setuptools.build_meta"
 
 [project]
 name = "chrome-ocr"
 version = "0.1.0"
 description = "Local OCR via Chrome's built-in Screen AI engine — PDF and image to Markdown, no API key required"
 readme = "README.md"
-license = { file = "LICENSE" }
+license = "MIT"
 authors = [{ name = "chrome-ocr contributors" }]
 keywords = [
     "ocr", "pdf", "image-to-text", "pdf-to-markdown",
@@ -17,7 +17,6 @@ classifiers = [
     "Development Status :: 4 - Beta",
     "Intended Audience :: Developers",
     "Intended Audience :: Science/Research",
-    "License :: OSI Approved :: MIT License",
     "Operating System :: Microsoft :: Windows",
     "Programming Language :: Python :: 3",
     "Programming Language :: Python :: 3.9",
@@ -45,21 +44,12 @@ dev  = ["pytest>=7.0", "pytest-cov>=4.0"]
 full = ["pymupdf>=1.22", "pytest>=7.0", "pytest-cov>=4.0"]
 
 [project.urls]
-Homepage   = "https://github.com/YOUR_USERNAME/chrome-ocr"
-Repository = "https://github.com/YOUR_USERNAME/chrome-ocr"
-"Bug Tracker" = "https://github.com/YOUR_USERNAME/chrome-ocr/issues"
+Homepage = "https://github.com/ayismas/chrome-ocr"
+Repository = "https://github.com/ayismas/chrome-ocr"
+"Bug Tracker" = "https://github.com/ayismas/chrome-ocr/issues"
 
-# ---------------------------------------------------------------------------
-#  Package layout:
-#  The repo root (this directory) IS the chrome_ocr package.
-#  Rename the directory to "chrome_ocr/" in a standalone repo, or keep the
-#  mapping below when developing inside a larger monorepo.
-# ---------------------------------------------------------------------------
 [tool.setuptools]
 packages = ["chrome_ocr"]
-
-[tool.setuptools.package-dir]
-chrome_ocr = "."
 
 [tool.setuptools.package-data]
 chrome_ocr = ["py.typed"]

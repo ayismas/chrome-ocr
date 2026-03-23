@@ -18,7 +18,7 @@ Chrome 已自带该模型，本库直接调用即可。
 | 要求 | 说明 |
 |---|---|
 | Windows 10 / 11 | `chrome_screen_ai.dll` 仅支持 Windows |
-| Google Chrome | Screen AI 组件由 Chrome 为无障碍功能自动下载 |
+| Google Chrome | 图片 OCR 和扫描版 / 图片型 PDF 需要；纯文本层 PDF 仍可直接提取 |
 | Python ≥ 3.9 | |
 
 ```bash
@@ -28,6 +28,9 @@ pip install pymupdf pillow numpy protobuf
 > **确认 Screen AI 组件已就绪**
 > 打开 Chrome → 设置 → 无障碍 → 启用任意屏幕阅读功能，
 > 然后确认 `%LOCALAPPDATA%\Google\Chrome\User Data\screen_ai\` 目录存在。
+
+> **说明**
+> `ocr_pdf()` 会优先直接提取文本层；只有页面几乎没有内嵌文本时，才会调用 Chrome Screen AI 做 OCR。
 
 ## 快速上手
 
@@ -125,7 +128,7 @@ md = ocr_pdf("b.pdf", engine=engine)
 | 缩进文本 | 前导空格 |
 | 多列行（≥ 3 行） | GFM 表格 |
 | 公式（`content_type=6`） | `$$...$$` 块 |
-| 页面分隔（仅 PDF） | `## Page N` + `---` |
+| 多页分隔（仅 PDF） | 由 `page_sep` 参数控制 |
 
 ## 项目结构
 

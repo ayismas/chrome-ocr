@@ -18,7 +18,7 @@ Chrome already ships the model; this library calls it directly.
 | Requirement | Notes |
 | --- | --- |
 | Windows 10 / 11 | `chrome_screen_ai.dll` is Windows-only |
-| Google Chrome | Screen AI component is downloaded automatically by Chrome for accessibility features |
+| Google Chrome | Required for image OCR and scanned / image-only PDFs; text-layer PDFs can still be extracted without it |
 | Python ≥ 3.9 | |
 
 ```bash
@@ -29,6 +29,9 @@ pip install pymupdf                 # PDF support (optional)
 > **Verify the Screen AI component is present**
 > Open Chrome → Settings → Accessibility → enable any screen reader feature,
 > then check that `%LOCALAPPDATA%\Google\Chrome\User Data\screen_ai\` exists.
+
+> **Note**
+> `ocr_pdf()` extracts text-layer PDFs directly via PyMuPDF. Chrome Screen AI is only needed when a page has little or no embedded text and must be OCR'd.
 
 ## Quick start
 

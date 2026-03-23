@@ -27,6 +27,7 @@ from chrome_ocr import (  # noqa: E402
     ocr_img_md,
     ocr_pdf,
 )
+import chrome_ocr.chrome_ocr as chrome_ocr_module  # noqa: E402
 from chrome_ocr.chrome_ocr import (  # noqa: E402
     _build_table_block,
     _detect_table,
@@ -416,6 +417,17 @@ class TestPublicAPI:
         assert "Page 1" in md1
         assert "Page 2" in md2
 
+    @requires_fitz
+    def test_text_pdf_does_not_require_dll(self, tmp_path, monkeypatch):
+        path = _make_text_pdf(tmp_path, pages=1)
+
+        def _unexpected_engine_call():
+            raise AssertionError("_get_engine() should not be called for text-layer PDFs")
+
+        monkeypatch.setattr(chrome_ocr_module, "_get_engine", _unexpected_engine_call)
+        md = ocr_pdf(str(path))
+        assert "quick brown fox" in md.lower()
+
 
 # ---------------------------------------------------------------------------
 #  OCR accuracy tests — verify that recognised text matches rendered text
@@ -540,7 +552,9 @@ class TestImageOnlyPDF:
     @requires_dll
     def test_mixed_pdf_handles_both_page_types(self, tmp_path):
         """A PDF mixing text pages and image-only pages should handle both."""
-        import fitz, io
+        import io
+
+        import fitz
         doc = fitz.open()
 
         # Page 1: text layer (direct extraction)

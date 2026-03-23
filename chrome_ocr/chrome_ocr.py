@@ -49,12 +49,15 @@ def _decode_msg(buf: bytes) -> dict[int, list]:
         if wt == 0:
             val, i = _DecodeVarint32(buf, i)
         elif wt == 1:
-            val = struct.unpack_from('<d', buf, i)[0]; i += 8
+            val = struct.unpack_from("<d", buf, i)[0]
+            i += 8
         elif wt == 2:
             length, i = _DecodeVarint32(buf, i)
-            val = buf[i:i + length]; i += length
+            val = buf[i : i + length]
+            i += length
         elif wt == 5:
-            val = struct.unpack_from('<f', buf, i)[0]; i += 4
+            val = struct.unpack_from("<f", buf, i)[0]
+            i += 4
         else:
             break
         fields.setdefault(fn, []).append((wt, val))
@@ -120,17 +123,18 @@ def _lines_to_markdown(lines: list[dict]) -> str:
     if not lines:
         return ""
 
-    lines = [l for l in lines if l["text"].strip()]
+    lines = [line for line in lines if line["text"].strip()]
     if not lines:
         return ""
 
-    heights = [l["bbox"]["h"] for l in lines if l["bbox"]["h"] > 0]
+    heights = [line["bbox"]["h"] for line in lines if line["bbox"]["h"] > 0]
     if not heights:
-        return "\n".join(l["text"] for l in lines)
+        return "\n".join(line["text"] for line in lines)
 
-    median_h = sorted(heights)[len(heights) // 2]
+    # Use the lower median so a single oversized heading does not redefine the body size.
+    median_h = sorted(heights)[(len(heights) - 1) // 2]
 
-    x_vals = [l["bbox"]["x"] for l in lines if l["bbox"]["x"] > 0]
+    x_vals = [line["bbox"]["x"] for line in lines if line["bbox"]["x"] > 0]
     base_x = min(x_vals) if x_vals else 0
 
     table_rows = _detect_table(lines, median_h)
@@ -403,7 +407,9 @@ class ScreenAIEngine:
         proto = self._call_dll(bgra, w, h)
         if not proto:
             return ""
-        return "\n".join(l["text"] for l in _parse_visual_annotation(proto) if l["text"].strip())
+        return "\n".join(
+            line["text"] for line in _parse_visual_annotation(proto) if line["text"].strip()
+        )
 
     def ocr_markdown(self, image) -> str:
         """Return layout-aware Markdown for *image* (headings, tables, math)."""
@@ -588,8 +594,8 @@ def ocr_pdf(
             "Install it with: pip install pymupdf"
         ) from None
 
-    ai    = engine or _get_engine()
-    doc   = fitz.open(pdf_path)
+    ai = engine
+    doc = fitz.open(pdf_path)
     total = len(doc)
 
     # Normalise page selection (external 1-based -> internal 0-based)
@@ -601,7 +607,6 @@ def ocr_pdf(
         indices = [p - 1 for p in pages]
     indices = [i for i in indices if 0 <= i < total]
 
-    max_dim = ai.max_dimension or 2048
     parts: list[str] = []
 
     for idx in indices:
@@ -610,6 +615,9 @@ def ocr_pdf(
 
         if len(raw_text) <= 50:
             # Scanned page — rasterise then OCR
+            if ai is None:
+                ai = _get_engine()
+            max_dim = ai.max_dimension or 2048
             scale = min(dpi / 72, max_dim / max(page.rect.width, page.rect.height))
             pix   = page.get_pixmap(matrix=fitz.Matrix(scale, scale), alpha=False)
             from PIL import Image

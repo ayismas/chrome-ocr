@@ -3,7 +3,7 @@
 
 -r requirements.txt
 
-# Optional PDF support (needed to run PDF-related tests)
+# Optional PDF support (needed to run ocr_pdf() tests)
 pymupdf>=1.22
 
 # Testing
