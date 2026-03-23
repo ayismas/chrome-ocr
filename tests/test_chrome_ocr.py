@@ -96,7 +96,7 @@ def _make_text_pdf(tmp_path: Path, pages: int = 2) -> Path:
 def _make_image_only_pdf(tmp_path: Path, text: str = "chrome ocr works") -> Path:
     """Scanned-style PDF: text is rasterised into an image with no text layer.
 
-    This forces pdf_to_markdown() to take the OCR path (Chrome Screen AI),
+    This forces ocr_pdf() to take the OCR path (Chrome Screen AI),
     because page.get_text() returns an empty string for image-only pages.
     """
     import io

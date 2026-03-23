@@ -29,14 +29,14 @@ classifiers = [
 ]
 requires-python = ">=3.9"
 dependencies = [
-    # Core: required for image_to_text()
+    # Core: required for ocr_img()
     "numpy>=1.23",
     "pillow>=9.0",
     "protobuf>=4.0",
 ]
 
 [project.optional-dependencies]
-# pip install chrome-ocr[pdf]   -> enables pdf_to_markdown()
+# pip install chrome-ocr[pdf]   -> enables ocr_pdf()
 # pip install chrome-ocr[dev]   -> development tools
 # pip install chrome-ocr[full]  -> everything
 pdf  = ["pymupdf>=1.22"]
