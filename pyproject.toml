@@ -1,0 +1,79 @@
+[build-system]
+requires = ["setuptools>=68", "wheel"]
+build-backend = "setuptools.backends.legacy:build"
+
+[project]
+name = "chrome-ocr"
+version = "0.1.0"
+description = "Local OCR via Chrome's built-in Screen AI engine — PDF and image to Markdown, no API key required"
+readme = "README.md"
+license = { file = "LICENSE" }
+authors = [{ name = "chrome-ocr contributors" }]
+keywords = [
+    "ocr", "pdf", "image-to-text", "pdf-to-markdown",
+    "chrome", "screen-ai", "local-ocr", "offline-ocr",
+]
+classifiers = [
+    "Development Status :: 4 - Beta",
+    "Intended Audience :: Developers",
+    "Intended Audience :: Science/Research",
+    "License :: OSI Approved :: MIT License",
+    "Operating System :: Microsoft :: Windows",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.9",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Topic :: Scientific/Engineering :: Image Recognition",
+    "Topic :: Text Processing",
+    "Topic :: Utilities",
+]
+requires-python = ">=3.9"
+dependencies = [
+    # Core: required for image_to_text()
+    "numpy>=1.23",
+    "pillow>=9.0",
+    "protobuf>=4.0",
+]
+
+[project.optional-dependencies]
+# pip install chrome-ocr[pdf]   -> enables pdf_to_markdown()
+# pip install chrome-ocr[dev]   -> development tools
+# pip install chrome-ocr[full]  -> everything
+pdf  = ["pymupdf>=1.22"]
+dev  = ["pytest>=7.0", "pytest-cov>=4.0"]
+full = ["pymupdf>=1.22", "pytest>=7.0", "pytest-cov>=4.0"]
+
+[project.urls]
+Homepage   = "https://github.com/YOUR_USERNAME/chrome-ocr"
+Repository = "https://github.com/YOUR_USERNAME/chrome-ocr"
+"Bug Tracker" = "https://github.com/YOUR_USERNAME/chrome-ocr/issues"
+
+# ---------------------------------------------------------------------------
+#  Package layout:
+#  The repo root (this directory) IS the chrome_ocr package.
+#  Rename the directory to "chrome_ocr/" in a standalone repo, or keep the
+#  mapping below when developing inside a larger monorepo.
+# ---------------------------------------------------------------------------
+[tool.setuptools]
+packages = ["chrome_ocr"]
+
+[tool.setuptools.package-dir]
+chrome_ocr = "."
+
+[tool.setuptools.package-data]
+chrome_ocr = ["py.typed"]
+
+# ---------------------------------------------------------------------------
+#  pytest
+# ---------------------------------------------------------------------------
+[tool.pytest.ini_options]
+testpaths   = ["tests"]
+addopts     = "-v --tb=short"
+
+# ---------------------------------------------------------------------------
+#  Coverage
+# ---------------------------------------------------------------------------
+[tool.coverage.run]
+source = ["chrome_ocr"]
+omit   = ["tests/*", "example/*"]
