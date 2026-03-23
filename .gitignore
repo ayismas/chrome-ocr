@@ -46,3 +46,4 @@ example/*.jpeg
 example/output.md
 example/doc_converter.log
 demo_test.pdf
+benchmarks/results/

@@ -4,8 +4,8 @@ chrome-ocr test suite
 Run with:  pytest tests/ -v
 
 Tests are split into two groups:
-  - Unit tests  — pure Python, no DLL, run on any platform / CI
-  - Integration — require chrome_screen_ai.dll (Windows + Chrome); auto-skipped otherwise
+  - Unit tests: pure Python, no DLL, run on any platform / CI
+  - Integration: require chrome_screen_ai.dll (Windows + Chrome); auto-skipped otherwise
 """
 
 from __future__ import annotations
@@ -80,12 +80,12 @@ def _make_text_image(
 
 
 def _make_text_pdf(tmp_path: Path, pages: int = 2) -> Path:
-    """Text-layer PDF — PyMuPDF extracts text directly (does NOT trigger OCR)."""
+    """Text-layer PDF: PyMuPDF extracts text directly (does NOT trigger OCR)."""
     import fitz
     doc = fitz.open()
     for i in range(pages):
         page = doc.new_page(width=595, height=842)
-        page.insert_text((60, 60), f"Page {i + 1} — chrome-ocr test document", fontsize=14)
+        page.insert_text((60, 60), f"Page {i + 1} - chrome-ocr test document", fontsize=14)
         page.insert_text((60, 90), "The quick brown fox jumps over the lazy dog.", fontsize=12)
     path = tmp_path / "text_layer.pdf"
     doc.save(str(path))
@@ -111,7 +111,7 @@ def _make_image_only_pdf(tmp_path: Path, text: str = "chrome ocr works") -> Path
 
     doc  = fitz.open()
     page = doc.new_page(width=595, height=842)
-    # Insert as embedded image — no text layer is created
+    # Insert as embedded image: no text layer is created
     page.insert_image(
         fitz.Rect(30, 30, 565, 220),
         stream=buf.read(),
@@ -123,7 +123,7 @@ def _make_image_only_pdf(tmp_path: Path, text: str = "chrome ocr works") -> Path
 
 
 # ---------------------------------------------------------------------------
-#  Unit tests — layout formatter
+#  Unit tests: layout formatter
 # ---------------------------------------------------------------------------
 
 class TestLinestoMarkdown:
@@ -201,7 +201,7 @@ class TestPublicAliases:
 
 
 # ---------------------------------------------------------------------------
-#  Unit tests — table detection
+#  Unit tests: table detection
 # ---------------------------------------------------------------------------
 
 class TestTableDetection:
@@ -272,7 +272,7 @@ class TestBuildTableBlock:
         assert "A" in md[0] and "B" in md[0]
 
     def test_ragged_rows_padded(self):
-        # Row 0 has 2 cols, row 1 has 1 col — should be padded
+        # Row 0 has 2 columns and row 1 has 1 column, so it should be padded.
         lines = [
             self._line("H1", 10, 0), self._line("H2", 200, 0),
             self._line("only", 10, 16),
@@ -286,7 +286,7 @@ class TestBuildTableBlock:
 
 
 # ---------------------------------------------------------------------------
-#  Integration tests — require chrome_screen_ai.dll
+#  Integration tests: require chrome_screen_ai.dll
 # ---------------------------------------------------------------------------
 
 class TestScreenAIEngine:
@@ -384,7 +384,7 @@ class TestPublicAPI:
     @requires_fitz
     @requires_dll
     def test_pdf_no_injected_headers(self, tmp_path):
-        """Output must contain only PDF content — no library-added headers."""
+        """Output must contain only PDF content, with no library-added headers."""
         path = _make_text_pdf(tmp_path, pages=2)
         md   = ocr_pdf(str(path))
         assert "## Page" not in md
@@ -430,7 +430,7 @@ class TestPublicAPI:
 
 
 # ---------------------------------------------------------------------------
-#  OCR accuracy tests — verify that recognised text matches rendered text
+#  OCR accuracy tests: verify that recognised text matches rendered text
 #
 #  Chrome Screen AI is a production-quality model; on clean, high-contrast
 #  images it should achieve near-100% accuracy on simple Latin words.
@@ -501,7 +501,7 @@ class TestOCRAccuracy:
 
 
 # ---------------------------------------------------------------------------
-#  Image-only PDF tests — verify the OCR path inside ocr_pdf()
+#  Image-only PDF tests: verify the OCR path inside ocr_pdf()
 #
 #  These PDFs have no text layer, so PyMuPDF returns "" for get_text().
 #  ocr_pdf() must fall through to Chrome Screen AI OCR.
